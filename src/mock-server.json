@@ -1,0 +1,40 @@
+{
+    "element" : [ {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438355,
+        "lng" : 10.991736,
+        "services" : [
+            "Punto Luce",
+            "WiFi",
+            "Telecamera"
+        ]
+      }, 
+      {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438276,
+        "lng" : 10.991969,
+        "services" : [
+            "Punto Luce",
+            "Telecamera"
+        ]
+      },
+      {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438155, 
+        "lng" : 10.992361,
+        "services" : [
+            "Punto Luce",
+            "WiFi",
+            "Telecamera",
+            "Monitoraggio Ambientale",
+            "Lora",
+            "LTE/GG",
+            "GPS",
+            "Diffusione sonora"
+        ]
+      }
+    ]
+}

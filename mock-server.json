@@ -1,0 +1,134 @@
+{
+    "element" : [ {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438355,
+        "lng" : 10.991736,
+        "services" : [
+            "Punto Luce",
+            "WiFi",
+            "Telecamera"
+        ]
+      }, 
+      {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438276,
+        "lng" : 10.991969,
+        "services" : [
+            "Punto Luce",
+            "Telecamera"
+        ]
+      },
+      {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438155, 
+        "lng" : 10.992361,
+        "services" : [
+            "Punto Luce",
+            "WiFi",
+            "Telecamera",
+            "Monitoraggio Ambientale",
+            "Lora",
+            "LTE/GG",
+            "GPS",
+            "Diffusione sonora"
+        ]
+      },
+      {
+        "area": "Punti Luce",
+        "name" : "Palo Intelligente",
+        "lat" : 45.438032,  
+        "lng" : 10.992780,
+        "services" : [
+            "Punto Luce",
+            "WiFi",
+            "Telecamera",
+            "Monitoraggio Ambientale",
+            "Lora",
+            "LTE/GG",
+            "GPS",
+            "Diffusione sonora"
+        ]
+      },
+      {
+        "area": "Cassonetti intelligenti",
+        "name" : "Smart bin",
+        "lat" : 45.439327,
+        "lng" : 10.993445,
+        "services" : [
+            "GPS",
+            "WiFi"
+        ]
+      },
+      {
+        "area": "Cassonetti intelligenti",
+        "name" : "Smart bin",
+        "lat" : 45.438845, 
+        "lng" : 10.993574,
+        "services" : [
+            "GPS",
+            "WiFi"
+        ]
+      },
+      {
+        "area": "Cassonetti intelligenti",
+        "name" : "Smart bin",
+        "lat" : 45.438597, 
+        "lng" : 10.993778,
+        "services" : [
+            "WiFi"
+        ]
+      },
+      {
+        "area": "Cassonetti intelligenti",
+        "name" : "Smart bin",
+        "lat" : 45.438424, 
+        "lng" : 10.994229,
+        "services" : [
+            "WiFi"
+        ]
+      },
+      {
+        "area": "Arredo urbano",
+        "name" : "Panchina",
+        "lat" : 45.439553, 
+        "lng" : 10.994583,
+        "services" : [
+            "WiFi",
+            "Corrente"
+        ]
+      },
+      {
+        "area": "Arredo urbano",
+        "name" : "Panchina",
+        "lat" : 45.439350,  
+        "lng" : 10.994969,
+        "services" : [
+            "WiFi",
+            "Corrente"
+        ]
+      },
+      {
+        "area": "Arredo urbano",
+        "name" : "Cestino",
+        "lat" : 45.438469,  
+        "lng" : 10.992158,
+        "services" : [
+            "WiFi",
+            "Monitoraggio ambientale"
+        ]
+      },
+      {
+        "area": "Arredo urbano",
+        "name" : "Cestino",
+        "lat" : 45.438499, 
+        "lng" : 10.993209,
+        "services" : [
+            "WiFi",
+            "Monitoraggio ambientale"
+        ]
+      }
+    ]
+}

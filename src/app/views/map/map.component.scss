@@ -1,0 +1,44 @@
+.map {
+    height: 80vh;
+}
+.icons {
+    width: 40px;
+    height: 40px;
+}
+
+.card-genius {
+    background-color: #2C4D71;
+    border-radius: 10px;
+}
+
+.card-recharge {
+    background-color: #237098;
+    border-radius: 10px;
+    
+}
+
+.cu-icon {
+    content: "\e951";
+}
+.card-lightpoint {
+    background-color: #0A8483;
+    border-radius: 10px;
+}
+
+.card-camera {
+    background-color: #879F90;
+    border-radius: 10px;
+}
+
+.col-img {
+    text-align: right;
+}
+
+.col-text {
+    color : white;
+}
+
+.disabled {
+    pointer-events: none;
+    background-color: grey;
+}

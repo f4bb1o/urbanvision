@@ -1,0 +1,87 @@
+<!-- <br>
+<div class="row">
+  <div class="col-sm-6 col-lg">
+      <div class="card card-genius">
+          <div class="card-body">
+            <div class="row">
+            <div class="col-8 col-text">
+              <div>GENIUS</div>
+              <div><b>23</b></div>
+              <div>100% operativi</div>
+            </div>
+            <div class="col-4 col-img"><div><img class="icons" src="../../../assets/img/Icone/Icona Palo Genius.png"></div></div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <div class="col-sm-6 col-lg">
+      <div class="card card-recharge">
+          <div class="card-body">
+            <div class="row">
+            <div class="col-8 col-text">
+              <div>Stazioni</div>
+              <div><b>23</b></div>
+              <div>100% operativi</div>
+            </div>
+            <div class="col-4 col-img"><div><img class="icons" src="../../../assets/img/Icone/Icona Ricarica Elettrica.png"></div></div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <div class="col-sm-6 col-lg">
+      <div class="card card-lightpoint">
+          <div class="card-body">
+            <div class="row">
+            <div class="col-8 col-text">
+              <div>Punti luce</div>
+              <div><b>23</b></div>
+              <div>100% operativi</div>
+            </div>
+            <div class="col-4 col-img"><div><img class="icons" src="../../../assets/img/Icone/Icona Punto Luce.png"></div></div>
+            </div>
+          </div>
+        </div>
+  </div>
+
+  <div class="col-sm-6 col-lg">
+      <div class="card card-camera">
+          <div class="card-body">
+            <div class="row">
+            <div class="col-8 col-text">
+              <div>Telecamere</div>
+              <div><b>23</b></div>
+              <div>100% operativi</div>
+            </div>
+            <div class="col-4 col-img"><div><img class="icons" src="../../../assets/img/Icone/Icona Telecamera.png"></div></div>
+            </div>
+          </div>
+        </div>
+  </div>
+</div> -->
+<div class="container" style="padding: 10px">
+  <div class="row">
+
+          
+  </div>
+  <div class="row">
+    <div class="col-sm col-lg"  >
+      <label>Area</label>
+      <ngx-select-dropdown (change)="changeValue($event,'area')" [config]="config" [options]="dropdownOptions" 
+              [(value)]="dataModelOptions" [multiple]="false" ></ngx-select-dropdown>
+    </div>
+    <div class="col-sm col-lg" *ngIf="dataModelOptions.length" >
+      <label>Elementi Smart</label>
+      <ngx-select-dropdown (change)="changeValue($event,'element')" [config]="config" [options]="dropdownElement" 
+              [(value)]="dataModelElement" [multiple]="true" ></ngx-select-dropdown>
+    </div>
+    <div class="col-sm col-lg" *ngIf="dataModelOptions.length" >
+        <label>Servizi</label>
+        <ngx-select-dropdown (change)="changeValue($event,'service')" [config]="config" [options]="dropdownService" 
+                [(value)]="dataModelService" [multiple]="true" ></ngx-select-dropdown>
+      </div>
+      
+  </div>
+</div>
+<div id="map" class="map"></div>
