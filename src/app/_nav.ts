@@ -160,7 +160,13 @@ export const navItems = [
   {
     name: 'Smart Building',
     url: '/smartbuilding',
-    icon: 'fa fa-building-o fa-lg',
+    icon: 'fa fa-building-o fa-lg'
+    
+  },
+  {
+    name: 'Ricariche Elettriche',
+    url: '/recharge',
+    icon: 'icon-energy',
     children: [
       {
         name: 'Diagnostica',
@@ -193,11 +199,6 @@ export const navItems = [
         icon: ''
       },
     ]
-  },
-  {
-    name: 'Ricariche Elettriche',
-    url: '/recharge',
-    icon: 'icon-energy'
   },
   {
     name: 'Monitoraggio Infrastrutture',

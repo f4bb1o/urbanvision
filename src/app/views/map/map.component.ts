@@ -156,20 +156,60 @@ export class MapComponent implements OnInit {
     });
 
 
+    var gruppo_OSM = new ol.layer.Group({
+      title:"Basemap",
+      layers: [
+        new ol.layer.Tile({
+          title: 'OSM',
+          metodo: 'ol.source.XYZ',
+          accesso: 'anonimo',
+          type: "base",
+          visible: true,
+          source: new ol.source.XYZ({
+            url: 'http://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png ',
+          })
+        }),
+        new ol.layer.Tile({
+          title: 'Mapbox',
+          metodo: 'ol.source.XYZ',
+          accesso: 'anonimo',
+          type: "base",
+          visible: true,
+          source: new ol.source.XYZ({
+            url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFiaW9kZyIsImEiOiJjanBiY2h3a3UybTRlM2twZXY4ajZzdXJoIn0.M_xds67zQX5FPzcENCbrIg',
+          })
+        })
+      ]
+    })
     //this.markerSource.addFeature(iconFeature);
 
     this.map = new ol.Map({
       target: 'map',
-      layers: [
-        new ol.layer.Tile({
-          source: new ol.source.OSM()
-        })
-      ],
+      layers: [gruppo_OSM],
       view: new ol.View({
         center: ol.proj.fromLonLat([this.longitude, this.latitude]),
         zoom: 17
       })
     });
+
+    var zoomslider = new ol.control.ZoomSlider();
+    this.map.addControl(zoomslider);
+
+    //Layers switcher
+    var layerSwitcher = new ol.control.LayerSwitcher({
+      tipLabel: 'layer switcher'
+    });
+    this.map.addControl(layerSwitcher);
+
+    function addParent(parentLyr) {
+      parentLyr.getLayers().forEach(function(lyr, idx, a) {
+          lyr.set('parent', parentLyr);
+          if (lyr.getLayers) {
+              addParent(lyr);
+          }
+      });
+  }
+  addParent(this.map.getLayerGroup());
     // let that = this;
     // this.map.on('singleclick',function(event){
     //   var lonLat = ol.proj.toLonLat(event.coordinate);
