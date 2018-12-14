@@ -1,1 +1,29 @@
 // Here you can add other styles
+.app-body-login {
+
+    width: 100%; height: 100%; top: 0; left: 0;
+background: url("../assets/img/sfondo/sfondo2.jpg") no-repeat center top; position: fixed; z-index: 3;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+}
+
+.logo-img-login {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 50%;
+}
+
+.container-login {
+    margin-bottom: -200px;
+}
+
+.login-card {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+.register-card {
+    background-color: rgba(31, 168, 216, 0.9) !important;
+}

@@ -11,11 +11,6 @@ import { RegisterComponent } from './views/register/register.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    redirectTo: 'dashboard',
-    pathMatch: 'full',
-  },
-  {
     path: '404',
     component: P404Component,
     data: {
@@ -30,7 +25,7 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'login',
+    path: '',
     component: LoginComponent,
     data: {
       title: 'Login Page'
@@ -53,6 +48,10 @@ export const routes: Routes = [
       {
         path: 'map',
         loadChildren: './views/map/map.module#MapModule'
+      },
+      {
+        path: 'webcam',
+        loadChildren: './views/webcam/webcam.module#WebcamModule'
       },
       {
         path: 'base',

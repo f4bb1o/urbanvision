@@ -42,6 +42,8 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { MapComponent } from './views/map/map.component';
 import { MapModule } from './views/map/map.module';
+import { WebcamComponent } from './views/webcam/webcam.component';
+import { WebcamModule } from './views/webcam/webcam.module';
 
 @NgModule({
   imports: [
@@ -57,7 +59,8 @@ import { MapModule } from './views/map/map.module';
     BsDropdownModule.forRoot(),
     TabsModule.forRoot(),
     ChartsModule,
-    MapModule
+    MapModule,
+    WebcamModule
   ],
   declarations: [
     AppComponent,

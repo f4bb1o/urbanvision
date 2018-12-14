@@ -1,8 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, TemplateRef } from '@angular/core';
 import { Element } from '../../model/element.model';
-import { Service } from '../../model/service.model';
 import { JsonApiService } from "../../services/json-api.service"
-import { HttpClient } from '@angular/common/http';
+import { NominatimService } from '../../services/nominatim/nominatim.service';
+import { ReverseObject } from '../../model/nominatim/reverseObject.model';
+import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
+import { BsModalService } from 'ngx-bootstrap/modal';
 
 
 declare var ol: any;
@@ -21,11 +23,16 @@ export interface Point {
 
 export class MapComponent implements OnInit {
 
+  modalRef: BsModalRef;
+  mapServices = new Map();
+  iconServices = Array();
+  modalTitle : string;
   points : Point[] = [];
   arrayElements : any[];
   arrayServices : any[];
   arrayArea : any[];
   map: any;
+  address : any;
   latitude: number = 45.438158;
   longitude: number = 10.993742;
   markerSource = new ol.source.Vector();
@@ -34,6 +41,7 @@ export class MapComponent implements OnInit {
   currentLayers : any = Array();
   styles = new Map();
 
+  //-------
 
 
   config = {
@@ -108,26 +116,62 @@ export class MapComponent implements OnInit {
   panchine : Element[] = new Array();
   cestini : Element[] = new Array();
 
-  dropdownOptions = ['Luce','Cassonetti intelligenti','Arredo urbano'];
+  dropdownOptions = ['Tutti','Luce','Cassonetti intelligenti','Arredo urbano'];
   dropdownElement = ['Punti Luce','Smart bin','Palo Intelligente','Panchina','Cestino'];
-  dropdownService = ['WiFi','Telecamera','Monitoraggio Ambientale','Lora','Corrente','LTE/GG','GPS','Diffusione Sonora','Punto Luce'];
+  dropdownElementAll = ['Punti Luce','Smart bin','Palo Intelligente','Panchina','Cestino'];
+
+  dropdownService = ['WiFi','Telecamera','Monitoraggio ambientale','Lora','Corrente','LTE','GPS','Diffusione sonora','Punto Luce'];
 
   dataModelOptions : any = Array();
   dataModelElement : any;
   dataModelService : any;
   
+  view : any;
+  element : any;
 
 
 
+  constructor(private modalService: BsModalService,private eRef: ElementRef, public jsonApiService : JsonApiService, public nominatim : NominatimService) { 
+    this.text = 'no clicks yet';
+  }
 
-  constructor(public jsonApiService : JsonApiService) { }
+  public text: String;
+
+  @HostListener('document:click', ['$event'])
+  clickout(event) {
+    if(this.eRef.nativeElement.contains(event.target)) {
+      this.text = "clicked inside";
+      console.log(this.text);
+    } else {
+      this.text = "clicked outside";
+      console.log(this.text);
+      let that = this;
+
+      setTimeout( function() { that.map.updateSize();}, 200);
+
+
+    }
+  }
 
 
 
   ngOnInit() {
     
 
-    
+  this.mapServices = new Map([
+      [ "Telecamera", false ],
+      [ "WiFi", false ],
+      [ "Monitoraggio ambientale", false ],
+      [ "Lora", false ],
+      [ "Corrente", false ],
+      [ "LTE", false ],
+      [ "GPS", false ],
+      [ "Diffusione sonora", false ],
+      [ "Punto Luce", false ]
+
+  ]);
+
+
    
    this.styles.set("Palo Intelligente",this.stylePalo);
    this.styles.set("Smart bin",this.styleSmartBin);
@@ -155,7 +199,6 @@ export class MapComponent implements OnInit {
       rainfall: 500
     });
 
-
     var gruppo_OSM = new ol.layer.Group({
       title:"Basemap",
       layers: [
@@ -178,19 +221,58 @@ export class MapComponent implements OnInit {
           source: new ol.source.XYZ({
             url: 'https://api.mapbox.com/styles/v1/mapbox/streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZmFiaW9kZyIsImEiOiJjanBiY2h3a3UybTRlM2twZXY4ajZzdXJoIn0.M_xds67zQX5FPzcENCbrIg',
           })
+        }),
+        new ol.layer.Tile({
+          title: 'Mapbox Street',
+          metodo: 'ol.source.XYZ',
+          accesso: 'anonimo',
+          type: "base",
+          visible: true,
+          source: new ol.source.XYZ({
+            url: 'https://api.mapbox.com/styles/v1/fabiodg/cjpdv3s2m1cp42rqkf9kqn8f4/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoiZmFiaW9kZyIsImEiOiJjanBiY2h3a3UybTRlM2twZXY4ajZzdXJoIn0.M_xds67zQX5FPzcENCbrIg'
+            ,
+          })
         })
       ]
     })
     //this.markerSource.addFeature(iconFeature);
 
+    this.view = new ol.View({
+      center: ol.proj.fromLonLat([this.longitude, this.latitude]),
+      zoom: 17
+    });
+
+
+
+
+
+    var container = document.getElementById('popup');
+    var content = document.getElementById('popup-content');
+    var closer = document.getElementById('popup-closer');
+
+    
+    var overlay = new ol.Overlay({
+      element: container,
+      autoPan: true,
+      autoPanAnimation: {
+        duration: 250
+      }
+    });
+
+    
+    closer.onclick = function() {
+      overlay.setPosition(undefined);
+      closer.blur();
+      return false;
+    };
+
     this.map = new ol.Map({
       target: 'map',
       layers: [gruppo_OSM],
-      view: new ol.View({
-        center: ol.proj.fromLonLat([this.longitude, this.latitude]),
-        zoom: 17
-      })
+      overlays: [overlay],
+      view: this.view
     });
+
 
     var zoomslider = new ol.control.ZoomSlider();
     this.map.addControl(zoomslider);
@@ -201,15 +283,55 @@ export class MapComponent implements OnInit {
     });
     this.map.addControl(layerSwitcher);
 
-    function addParent(parentLyr) {
-      parentLyr.getLayers().forEach(function(lyr, idx, a) {
-          lyr.set('parent', parentLyr);
-          if (lyr.getLayers) {
-              addParent(lyr);
-          }
+    let that = this;
+
+    window.onresize = function()
+    {
+      setTimeout( function() { that.map.updateSize();}, 100);
+    }
+
+
+
+  this.map.on('singleclick', function(evt) {
+    var feature = that.map.forEachFeatureAtPixel(evt.pixel,
+      function(feature) {
+        return feature;
       });
-  }
-  addParent(this.map.getLayerGroup());
+      if (feature) {
+        that.iconServices = [];
+
+        console.log(feature);
+        var prova = feature.get("custom");
+        var coordinate = evt.coordinate;
+        var text = "";
+        var icons_text = "";
+        var services = feature.get("services");
+        var point = feature.getGeometry();
+        var lonlat = ol.proj.transform(point.getCoordinates(), 'EPSG:3857', 'EPSG:4326');
+        var lon = lonlat[0];
+        var lat = lonlat[1];
+
+        that.nominatim.getReverseGeocoding(lon,lat).subscribe((reverseObject: ReverseObject) => {
+          that.address = reverseObject.address.road;
+          text += "<div><b>Tipo</b> : "+feature.get("name")+"</div>";
+          var str = reverseObject.display_name; 
+          var splitted = str.split(",", 1); 
+          text += "<div><b>Posizione</b> : "+splitted[0]+"</div>";
+          
+          services.forEach(element => {
+            that.iconServices.push(element);
+            //icons_text += '<img class="thumb" style="heigth : 25px; width : 25px;" src="../../../assets/img/servizi/'+element+'.png">&nbsp';
+          });
+          //text += icons_text;
+        
+          content.innerHTML = text;
+          //content.innerHTML = prova[0];
+          overlay.setPosition(coordinate);
+              
+         });
+
+      }
+  });
     // let that = this;
     // this.map.on('singleclick',function(event){
     //   var lonLat = ol.proj.toLonLat(event.coordinate);
@@ -220,8 +342,12 @@ export class MapComponent implements OnInit {
 
   addArea(values){
     this.arrayServices = [];
-    console.log(values);
     switch (values[0]) {
+      case "Tutti":
+        this.dropdownElement = this.dropdownElementAll;
+        this.dataModelElement = [];
+        this.dataModelService = [];
+        break;     
       case "Luce":
         this.dropdownElement = ['Punti Luce','Palo Intelligente'];
         this.dataModelElement = [];
@@ -243,6 +369,7 @@ export class MapComponent implements OnInit {
   }
 
   addElements(values){
+    var that = this
     this.arrayElements = values;
     
     if(this.arrayServices && this.arrayServices.length != 0){
@@ -251,7 +378,8 @@ export class MapComponent implements OnInit {
       this.arrayElements.forEach(element => {
         this.jsonApiService.getElements(element).subscribe((elements: Element[]) => {
           elements.forEach(jsonObject => {
-            this.addMarker(jsonObject.lng,jsonObject.lat,this.styles.get(jsonObject.name));
+            this.addMarker(jsonObject,this.styles.get(jsonObject.name));
+
             // let p1: Point = { lat: jsonObject.lat, lon: jsonObject.lng };
             // this.points.push(p1);
           });
@@ -272,7 +400,7 @@ export class MapComponent implements OnInit {
           elements.forEach(jsonObject => {
 
             if(this.arrayElements.includes(jsonObject.name)){
-              this.addMarker(jsonObject.lng,jsonObject.lat,this.styles.get(jsonObject.name));
+              this.addMarker(jsonObject,this.styles.get(jsonObject.name));
             }
           });
         });
@@ -298,18 +426,15 @@ export class MapComponent implements OnInit {
 
   }
 
-  public addMarker(lon, lat , style) {
+  public addMarker(jsonObject : Element, style) {
     // console.log('lon:', lon);
     // console.log('lat:', lat);
-  
     var source = new ol.source.Vector();
-  
     var iconFeature = new ol.Feature({
-      geometry: new ol.geom.Point(ol.proj.transform([lon, lat], 'EPSG:4326',
+      geometry: new ol.geom.Point(ol.proj.transform([jsonObject.lng, jsonObject.lat], 'EPSG:4326',
         'EPSG:3857')),
-      name: 'Null Island',
-      population: 4000,
-      rainfall: 500
+      name: jsonObject.name,
+      services : jsonObject.services
     });
     
   
@@ -337,5 +462,29 @@ export class MapComponent implements OnInit {
         this.map.removeLayer(layersToRemove[i]);
     }
   }
+
+  onResize($event) {
+    let that = this;
+    setTimeout( function() { that.map.updateSize();}, 100);
+
+  }
+  
+  openModal(template: TemplateRef<any>,service : string) {
+    this.modalTitle = service;
+    this.mapServices.set(service,true);
+    this.modalRef = this.modalService.show(template);
+    console.log(service);
+    
+    console.log(this.mapServices);
+  }
+
+  closeModal(){
+    this.modalRef.hide();
+    let that = this;
+    this.mapServices.forEach((value: string, key: string) => {
+      that.mapServices.set(key,false);
+  });
+  }
+
 
 }

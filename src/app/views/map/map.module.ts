@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { AgmCoreModule } from '@agm/core';
 import { CommonModule } from "@angular/common"
 import { SelectDropDownModule } from 'ngx-select-dropdown'
+import { ModalModule } from 'ngx-bootstrap';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 
 import { MapComponent } from './map.component';
@@ -12,9 +13,8 @@ import { MapRoutingModule } from './map-routing.module';
     CommonModule,
     MapRoutingModule,
     SelectDropDownModule,
-    AgmCoreModule.forRoot({
-      apiKey : "AIzaSyCBG-VQjo_MW2Giwrar-gmkgULSxk-D84g"
-    })
+    ModalModule.forRoot(),
+    TabsModule.forRoot()
   ],
   declarations: [ MapComponent ]
 })
