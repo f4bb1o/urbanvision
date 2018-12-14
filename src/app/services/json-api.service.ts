@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
   providedIn: 'root'
 })
 export class JsonApiService {
-  url = 'http://my-json-server.typicode.com/f4bb1o/json-server/';
+  url = 'https://my-json-server.typicode.com/f4bb1o/json-server/';
 
   constructor(private http: HttpClient) { }
 
